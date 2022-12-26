@@ -4,7 +4,6 @@ use bracket_lib::prelude::*;
 
 const SCREEN_WIDTH: i32 = 160;
 const SCREEN_HEIGHT: i32 = 128;
-const FRAME_DURATION: f32 = 5.0;
 
 const RENDER_OFFSET_X : i32 = 5;
 
@@ -63,14 +62,6 @@ impl BBox {
     }
 }
 
-fn screen_x(world_x: i32) -> i32 {
-    return world_x*SPRITE_SIZE
-}
-
-fn screen_y(world_y: i32) -> i32 {
-    return world_y*SPRITE_SIZE
-}
-
 impl Obstacle {
     fn new(x: i32, score: i32) -> Self {
         let mut random = RandomNumberGenerator::new();
@@ -101,7 +92,7 @@ impl Obstacle {
         let lower_bbox = BBox { x: self.x, y: self.gap_y + half_size, x_end: self.x + SPRITE_SIZE, y_end: SCREEN_HEIGHT};
 
         
-        (player_bbox.is_hit(&upper_bbox) || player_bbox.is_hit(&lower_bbox))
+        player_bbox.is_hit(&upper_bbox) || player_bbox.is_hit(&lower_bbox)
     }
     
 
