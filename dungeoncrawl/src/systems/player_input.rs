@@ -3,6 +3,8 @@ use crate::prelude::*;
 #[system]
 #[read_component(Point)]
 #[read_component(Player)]
+#[read_component(Enemy)]
+#[write_component(Health)]
 pub fn player_input(
     ecs: &mut SubWorld,    
     commands: &mut CommandBuffer,
@@ -13,6 +15,13 @@ pub fn player_input(
     if let Some(key) = key {
 
         if *key == VirtualKeyCode::Space {
+            let mut players = <(Entity, &Point)>::query().filter(component::<Player>());
+            let player_entity = players.iter(ecs).find_map(|(entity, _)| Some(*entity)).unwrap();
+            
+            if let Ok(mut health) = ecs.entry_mut(player_entity).unwrap().get_component_mut::<Health>() {         
+                health.current = i32::min(health.max, health.current+1);
+            }
+
             *turn_state = TurnState::PlayerTurn;
             return;
         }
